@@ -1,0 +1,32 @@
+{
+  "name": "distributed-video-streaming",
+  "version": "1.0.0",
+  "description": "Sprint 1 browser client: a simple, responsive video streaming interface built with plain HTML, CSS and JavaScript (no frameworks, no build step).",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:performance": "jest tests/performance --runInBand"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Distributed-Video-Streaming/distributed-video-streaming.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Distributed-Video-Streaming/distributed-video-streaming/issues"
+  },
+  "homepage": "https://github.com/Distributed-Video-Streaming/distributed-video-streaming#readme",
+  "devDependencies": {
+    "jest": "^30.5.2",
+    "jest-environment-jsdom": "^30.5.2"
+  }
+}
