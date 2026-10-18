@@ -1,0 +1,48 @@
+/* Watch page: header, connection status, player, error banner, details */
+.crumb{padding-top:28px;font-size:12px;color:var(--mute);display:flex;gap:10px;align-items:center}
+.crumb b{color:var(--text);font-weight:400}
+.title{display:flex;justify-content:space-between;align-items:center;margin:14px 0 18px}
+.title h1{font-size:34px;font-weight:400}
+.title a{font-size:12px;color:var(--mute);display:flex;gap:8px;align-items:center}
+
+/* connection status: one element, three states via data-state */
+.status{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;font-size:12px;color:var(--mute)}
+.status .dot{width:8px;height:8px;border-radius:50%;background:var(--mute)}
+.status[data-state="connecting"] .dot{background:#e0a96d;animation:pulse 1s infinite}
+.status[data-state="connected"] .dot{background:#3ecf8e}
+.status[data-state="disconnected"] .dot{background:#ff4d6d}
+.status[data-state="connected"]{color:var(--text)}
+@keyframes pulse{50%{opacity:.3}}
+
+/* player */
+.player{position:relative;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000}
+.player video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:transparent}
+.player::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.7),transparent 30%);pointer-events:none}
+.np{position:absolute;top:20px;left:24px;z-index:2;font-size:10px;color:#bbb;pointer-events:none}
+.np b{display:block;font-size:14px;font-weight:400;color:#fff}
+.buffer{position:absolute;inset:0;z-index:2;display:none;place-items:center;color:#fff;pointer-events:none}
+.player.buffering .buffer{display:grid}
+.controls{position:absolute;left:24px;right:24px;bottom:14px;z-index:3}
+.seek{width:100%;display:block;margin-bottom:6px;accent-color:var(--acc);cursor:pointer}
+.ctrls{display:flex;align-items:center;gap:14px}
+.ctrls button{width:34px;height:34px;display:grid;place-items:center;border-radius:6px}
+.ctrls button:hover{background:#fff2}
+.ctrls button:disabled{opacity:.35;cursor:not-allowed}
+.ctrls .i{width:20px;height:20px}
+.vol{width:70px;accent-color:var(--acc)}
+.time{font-size:12px;color:#ddd}
+.sp{flex:1}
+
+/* error banner (shown over the player) */
+.error{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;background:rgba(14,15,17,.88)}
+.error[hidden]{display:none}
+.error p{max-width:420px}
+.error .label{color:#ff4d6d;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+
+/* details */
+.info{margin-top:36px;max-width:720px}
+.info .meta{display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:12px;color:var(--mute);margin-bottom:18px}
+.info p.syn{color:#b7bcc4;font-size:15px;line-height:1.7;margin-bottom:24px}
+.info .acts{display:flex;gap:10px;flex-wrap:wrap}
+
+@media(max-width:900px){.title h1{font-size:26px}.vol{display:none}.controls{left:12px;right:12px}.np{left:14px}}

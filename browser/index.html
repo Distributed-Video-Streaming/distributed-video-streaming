@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Relay – Home</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="index.html">RELAY</a>
+    <nav class="links">
+      <a class="on" href="index.html">Home</a>
+      <a href="#new">Films</a>
+      <a href="#world">Series</a>
+      <a href="#collection">Collections</a>
+    </nav>
+    <label class="search"><span data-i="search"></span><input placeholder="Search films, series, people" aria-label="Search"></label>
+    <div class="avatar">JD</div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="hero">
+    <div class="wrap">
+      <div class="eyebrow">Relay Original · Film of the week</div>
+      <h1 id="hTitle"></h1>
+      <div class="hmeta" id="hMeta"></div>
+      <p class="d" id="hDesc"></p>
+      <div class="ctl">
+        <a class="btn pri" id="hWatch" href="watch.html"><span data-i="play"></span>Watch now</a>
+        <button class="btn" id="hList"><span data-i="plus"></span><b style="font-weight:400">Add to my list</b></button>
+      </div>
+    </div>
+    <div class="hfoot"><div class="dots" id="dots"></div><span id="hCredit"></span></div>
+  </section>
+
+  <div class="wrap">
+    <section class="s">
+      <div class="sh"><h2>Pick up where you left off</h2></div>
+      <div class="grid3" id="cont"></div>
+    </section>
+
+    <section class="s" id="new">
+      <div class="sh"><div><h2>New &amp; noteworthy</h2><p>Fresh arrivals. Future favorites.</p></div></div>
+      <div class="grid6" id="newGrid"></div>
+    </section>
+
+    <section class="banner" id="collection">
+      <div>
+        <span class="acc" style="font-size:10px">The curator's cut / 12 films</span>
+        <h2>When the city sleeps.</h2>
+        <p>For the restless. For the dreamers. A collection of neon-lit journeys into the other side of midnight.</p>
+      </div>
+      <div class="sign">THE OASIS</div>
+    </section>
+
+    <section class="s" id="world">
+      <div class="sh"><div><h2>Great stories have no borders</h2><p>Exceptional cinema, from everywhere.</p></div></div>
+      <div class="grid6" id="worldGrid"></div>
+      <div class="chips" id="chips"></div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fbot"><span>© 2026 Relay. All stories welcome.</span><span>Distributed Video Streaming · Sprint 1</span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+<script src="js/app.js"></script>
+</body>
+</html>
