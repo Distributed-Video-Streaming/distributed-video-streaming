@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "jest",
+    "coverage": "jest --coverage",
     "test:performance": "jest tests/performance --runInBand"
   },
   "jest": {
