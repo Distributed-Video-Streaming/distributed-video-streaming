@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Watch – Relay</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/watch.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="index.html">RELAY</a>
+    <nav class="links">
+      <a href="index.html">Home</a>
+      <a class="on" href="watch.html">Watch</a>
+    </nav>
+    <div class="avatar">JD</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="crumb"><span>Films</span><span data-i="chev"></span><b id="fCrumb">Title</b></div>
+  <div class="title">
+    <h1 id="fTitle">Title</h1>
+    <a href="index.html"><span data-i="back"></span>Back to browse</a>
+  </div>
+
+  <!-- Connection status: connecting | connected | disconnected -->
+  <div class="status" id="status" data-state="connecting" role="status" aria-live="polite">
+    <i class="dot"></i><span id="statusText">Connecting…</span>
+  </div>
+
+  <div class="player" id="player">
+    <video id="video" playsinline preload="metadata">
+      Your browser does not support HTML5 video.
+    </video>
+
+    <div class="np">NOW PLAYING<b id="fNow">Title</b></div>
+    <div class="buffer" id="buffer">Buffering…</div>
+
+    <div class="error" id="error" role="alert" hidden>
+      <span class="label">Playback problem</span>
+      <p id="errorMsg"></p>
+      <button class="btn pri sm" id="retry" type="button">Try again</button>
+    </div>
+
+    <div class="controls">
+      <input class="seek" id="seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+      <div class="ctrls">
+        <button id="pp" type="button" aria-label="Play" data-i="play"></button>
+        <button id="rw" type="button" aria-label="Back 10 seconds" data-i="replay"></button>
+        <button id="mute" type="button" aria-label="Mute" data-i="vol"></button>
+        <input class="vol" id="vol" type="range" min="0" max="100" value="60" aria-label="Volume">
+        <span class="time" id="time">0:00 / 0:00</span>
+        <span class="sp"></span>
+        <button id="pip" type="button" aria-label="Picture in picture" data-i="pip"></button>
+        <button id="fs" type="button" aria-label="Fullscreen" data-i="full"></button>
+      </div>
+    </div>
+  </div>
+
+  <section class="info">
+    <div class="meta">
+      <span id="fYear">2025</span><span id="fRun">1h 45m</span>
+      <span class="tag" id="fAge">PG-13</span><span id="fGenre">Drama</span>
+    </div>
+    <p class="syn" id="fSyn"></p>
+    <div class="acts">
+      <button class="btn" id="list" type="button"><span data-i="plus"></span><b style="font-weight:400">Add to my list</b></button>
+      <button class="btn" id="share" type="button"><span data-i="share"></span>Share</button>
+    </div>
+  </section>
+
+  <section class="s">
+    <div class="sh"><div><h2>More like this</h2><p>For the worlds you don't want to leave.</p></div></div>
+    <div class="grid6" id="more"></div>
+  </section>
+</main>
+
+<footer class="slim"><div class="wrap"><span>© 2026 RELAY. All rights reserved.</span></div></footer>
+
+<div class="toast" id="toast" role="status"></div>
+<script src="js/app.js"></script>
+<script src="js/player.js"></script>
+</body>
+</html>
