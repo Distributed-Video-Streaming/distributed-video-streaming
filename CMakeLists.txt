@@ -8,6 +8,8 @@ add_executable(MyProject
     source/src/main.cpp
     source/src/video_frame.cpp
     source/src/file_video_source.cpp
+    source/src/jpeg_encoder.cpp
+    source/src/protocol.cpp
 )
 
 # header files

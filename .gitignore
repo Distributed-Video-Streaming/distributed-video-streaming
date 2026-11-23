@@ -1,6 +1,13 @@
 # Prerequisites
 *.d
 
+#
+test.mp4
+build/
+ffmpeg/
+.vscode/
+__cmake_systeminformation/
+
 # Compiled Object files
 *.slo
 *.lo

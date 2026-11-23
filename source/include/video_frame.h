@@ -5,7 +5,7 @@ struct VideoFrame {
     int width = 0;                       
     int height = 0;                      
     long long frameNumber = 0;           
-    long long timestamps = 0;           
+    long long timestampMs = 0;           // time of this frame in milliseconds
     std::vector<unsigned char> data;
 
     size_t expectedSize() const;
