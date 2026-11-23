@@ -19,6 +19,6 @@ void VideoFrame::clear() {
     width = 0;
     height = 0;
     frameNumber = 0;
-    timestamps = 0;
+    timestampMs = 0;
     data.clear();
 }
