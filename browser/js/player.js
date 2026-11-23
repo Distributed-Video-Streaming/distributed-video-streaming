@@ -10,6 +10,12 @@
 const SAMPLE_VIDEO = 'assets/Chopin - Nocturne op.9 No.2.mp4';
 const CONNECT_TIMEOUT_MS = 15000;
 
+/* false = play the local sample video (no proxy needed).
+   true  = get the video from the Video Proxy through WebRTC.
+   Test without editing code: open watch.html?proxy=1 */
+const USE_PROXY = new URLSearchParams(location.search).get('proxy') === '1';
+const SIGNALING_URL = 'ws://localhost:8080/ws';   // the proxy's WebSocket address
+
 const STATUS_TEXT = {
   connecting: 'Connecting…',
   connected: 'Connected',
@@ -47,21 +53,65 @@ function clearError() {
 }
 
 /* ---------- source ----------
-   Sprint 1: a sample video URL.
-   Later sprints: replace the body with the WebRTC stream, e.g.
-   video.srcObject = remoteStream, and call setStatus() from the
-   connection's state-change events. */
+   Local mode: play the sample file (placeholder until the proxy exists).
+   Proxy mode: signaling + WebRTC, then the stream is shown in the <video>. */
+let signaling = null;
+let rtc = null;
+
+function stopStream() {
+  if (signaling) signaling.onClose = () => {};
+  if (rtc) rtc.close();
+  if (signaling) signaling.close();
+  rtc = signaling = null;
+  video.srcObject = null;
+}
+
+async function startWebRTC() {
+  try {
+    signaling = new SignalingClient(SIGNALING_URL);
+    await signaling.connect();
+    signaling.onClose = () => {
+      if ($('#status').dataset.state !== 'connected') showError('Lost connection to the streaming server.');
+    };
+    rtc = new WebRTCClient(signaling, {
+      onStream: (stream) => {
+        video.srcObject = stream;
+        video.play().catch(() => {});
+      },
+      onState: (state) => {
+        if (state === 'connected') {
+          clearTimeout(connectTimer);
+          setStatus('connected');
+        } else if (state === 'failed' || state === 'disconnected') {
+          showError('The video connection was lost. Try again.');
+        }
+      },
+      onError: showError
+    });
+    await rtc.start();
+  } catch (err) {
+    showError(err.message || 'Could not connect to the streaming server.');
+  }
+}
+
 function loadSource() {
   clearError();
   setStatus('connecting');
-  video.src = SAMPLE_VIDEO;
-  video.load();
+  stopStream();
   clearTimeout(connectTimer);
   connectTimer = setTimeout(() => {
     if ($('#status').dataset.state === 'connecting') {
       showError('Could not connect in time. Check your connection and try again.');
     }
   }, CONNECT_TIMEOUT_MS);
+
+  if (USE_PROXY) {
+    video.removeAttribute('src');
+    startWebRTC();
+  } else {
+    video.src = SAMPLE_VIDEO;
+    video.load();
+  }
 }
 
 /* ---------- video events ---------- */
