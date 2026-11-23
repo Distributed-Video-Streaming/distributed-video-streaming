@@ -1,0 +1,19 @@
+flowchart LR
+  B["Browser<br/>browser/ (HTML, CSS, JS)<br/>HTML5 video element"]
+  PY["scripts/stream_probe.py"]
+  subgraph P["proxy/ (C++ HTTP server)"]
+    R["Router + CORS + logging"]
+    C["Catalog service"]
+    M["Media resolver<br/>(ID to file)"]
+    S["Stream + Range handler"]
+  end
+  F[("Media directory<br/>.mp4 / .webm")]
+  SRC["source/ FileVideoSource<br/>(FFmpeg, not in stream path)"]
+  B -->|HTTP| R
+  PY -->|HTTP| R
+  R --> C
+  R --> S
+  C --> M
+  S --> M
+  M --> F
+  C -.->|optional duration probe| SRC
