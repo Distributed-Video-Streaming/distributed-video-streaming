@@ -1,5 +1,12 @@
 #include "file_video_source.h"
 
+// because FFmpeg written in c i used extern "C"
+extern "C" {
+    #include <libavformat/avformat.h>
+    #include <libavcodec/avcodec.h>
+    #include <libswscale/swscale.h>
+}
+
 FileVideoSource::FileVideoSource() {
     formatContext = NULL;
     codecContext = NULL;
@@ -9,17 +16,32 @@ FileVideoSource::FileVideoSource() {
     videoStreamIndex = -1;
     frameCount = 0;
     fileEnded = false;
+    videoWidth = 0;
+    videoHeight = 0;
+    videoFrameRate = 0.0;
 }
 
 FileVideoSource::~FileVideoSource() {
     close();   
 }
 
-std::string FileVideoSource::errorMessage() {
+std::string FileVideoSource::errorMessage() const {
     return errorText;
 }
 
-bool FileVideoSource::open(std::string path) {
+int FileVideoSource::width() const {
+    return videoWidth;
+}
+
+int FileVideoSource::height() const {
+    return videoHeight;
+}
+
+double FileVideoSource::frameRate() const {
+    return videoFrameRate;
+}
+
+bool FileVideoSource::open(const std::string& path) {
     close();               
     errorText = "";
     frameCount = 0;
@@ -77,6 +99,15 @@ bool FileVideoSource::open(std::string path) {
         return false;
     }
 
+    videoWidth = codecContext->width;
+    videoHeight = codecContext->height;
+
+    AVRational rate = formatContext->streams[videoStreamIndex]->avg_frame_rate;
+    if (rate.num <= 0 || rate.den <= 0) {
+        rate = formatContext->streams[videoStreamIndex]->r_frame_rate;
+    }
+    videoFrameRate = (rate.num > 0 && rate.den > 0) ? av_q2d(rate) : 0.0;
+
     packet = av_packet_alloc();
     frame = av_frame_alloc();
     if (packet == NULL || frame == NULL) {
@@ -88,7 +119,7 @@ bool FileVideoSource::open(std::string path) {
     return true;
 }
 
-bool FileVideoSource::readFrame(VideoFrame& outFrame) {
+bool FileVideoSource::readFrame(VideoFrame& outputFrame) {
     if (formatContext == NULL) {
         errorText = "Video is not open";
         return false;
@@ -108,11 +139,11 @@ bool FileVideoSource::readFrame(VideoFrame& outFrame) {
                 return false;
             }
 
-            outFrame.width = frame->width;
-            outFrame.height = frame->height;
-            outFrame.data.resize(outFrame.expectedSize());   
+            outputFrame.width = frame->width;
+            outputFrame.height = frame->height;
+            outputFrame.data.resize(outputFrame.expectedSize());   
 
-            unsigned char* destination[1] = { outFrame.data.data() };
+            unsigned char* destination[1] = { outputFrame.data.data() };
             int bytesPerRow[1] = { frame->width * 3 };
             sws_scale(converter, frame->data, frame->linesize, 0, frame->height,
                       destination, bytesPerRow);
@@ -120,12 +151,12 @@ bool FileVideoSource::readFrame(VideoFrame& outFrame) {
             AVRational timeBase = formatContext->streams[videoStreamIndex]->time_base;
             long long pts = frame->best_effort_timestamp;
             if (pts == AV_NOPTS_VALUE) {
-                outFrame.timestamps = 0;
+                outputFrame.timestampMs = 0;
             } else {
-                outFrame.timestamps = (long long)(pts * av_q2d(timeBase) * 1000.0);
+                outputFrame.timestampMs = (long long)(pts * av_q2d(timeBase) * 1000.0);
             }
 
-            outFrame.frameNumber = frameCount;
+            outputFrame.frameNumber = frameCount;
             frameCount = frameCount + 1;
 
             av_frame_unref(frame);   
@@ -183,4 +214,7 @@ void FileVideoSource::close() {
         avformat_close_input(&formatContext);
     }
     videoStreamIndex = -1;
+    videoWidth = 0;
+    videoHeight = 0;
+    videoFrameRate = 0.0;
 }

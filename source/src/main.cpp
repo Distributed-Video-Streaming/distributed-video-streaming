@@ -8,6 +8,9 @@ int main() {
         std::cout << "Error: " << video.errorMessage() << "\n";
     }
 
+    std::cout << "Source: " << video.width() << "x" << video.height()
+              << " @ " << video.frameRate() << " fps\n";
+
     VideoFrame frame;
     int count = 0;
 
