@@ -1,0 +1,13 @@
+sequenceDiagram
+  participant U as Browser
+  participant P as proxy
+  participant F as Media directory
+  U->>P: GET /api/videos
+  P->>F: scan media directory
+  P-->>U: 200 {"videos": [...]}
+  U->>P: GET /api/videos/{id}/stream
+  P->>F: resolve id to file
+  P-->>U: 200 or 206, Accept-Ranges: bytes
+  Note over U: user seeks
+  U->>P: GET /api/videos/{id}/stream, Range: bytes=N-
+  P-->>U: 206 Partial Content, Content-Range
